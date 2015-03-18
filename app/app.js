@@ -17,7 +17,7 @@ angular.module('miammWebClient', [
     };
 })
 .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/login');
 
   $stateProvider
 
