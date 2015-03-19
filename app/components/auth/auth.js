@@ -7,11 +7,16 @@ angular.module('miammWebClient.auth', ['miammWebClient.config'])
   $scope.login = function (credentials) {
     AuthService.login(credentials).then(function (token) {
       $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-      $scope.setUserToken(token);
+      $scope.setisAuthenticated(AuthService.isAuthenticated());
     }, function () {
       $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
     });
   };
+})
+.controller('LogoutCtrl', function ($state, $scope, AuthService) {
+  AuthService.logout();
+  $scope.setisAuthenticated(AuthService.isAuthenticated());
+  $state.go("login");
 })
 .controller('RegisterCtrl', function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
   $scope.credentials = {
@@ -23,20 +28,27 @@ angular.module('miammWebClient.auth', ['miammWebClient.config'])
   $scope.register = function (credentials) {
     AuthService.register(credentials).then(function (token) {
       $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-      $scope.setUserToken(token);
     }, function () {
       $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
     });
   };
 })
-.factory('AuthService', function ($http, Session, SETTINGS) {
+.factory('AuthService', function ($http, $rootScope, localStorageService, Session, SETTINGS) {
   var authService = {};
+
+  authService.init = function() {
+    var userToken = localStorageService.get("userToken")
+    if(userToken){
+      Session.create(userToken);
+    }
+  };
 
   authService.login = function (credentials) {
     return $http
     .post(SETTINGS.SERVICE_URL+'/auth/login/', credentials)
     .then(function (res) {
-      Session.create(res.data.key);
+        Session.create(res.data.key);
+        localStorageService.set('userToken',res.data.key);
         return res.data.key;
       });
     };
@@ -50,19 +62,25 @@ angular.module('miammWebClient.auth', ['miammWebClient.config'])
       });
     };
 
+    authService.logout = function(){
+      localStorageService.clearAll();
+      Session.destroy();
+    }
+
     authService.isAuthenticated = function () {
       return !!Session.userToken;
     };
 
+    // Call constructor
+    authService.init();
+
     return authService;
 })
 .service('Session', function () {
-  this.create = function (sessionId, userToken) {
-    this.id = sessionId;
+  this.create = function (userToken) {
     this.userToken = userToken;
   };
   this.destroy = function () {
-    this.id = null;
     this.userToken = null;
   };
 })

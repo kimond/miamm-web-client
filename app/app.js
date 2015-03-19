@@ -6,17 +6,23 @@ angular.module("miammWebClient.menu", ["miammWebClient.config"]);
 angular.module('miammWebClient', [
 'ui.router',
 'ngCookies',
+'LocalStorageModule',
 'miammWebClient.config',
 'miammWebClient.auth',
 'miammWebClient.menu'
 ])
 .controller('mainController', function ($scope, AuthService) {
-    $scope.userToken = null;
-    $scope.setUserToken = function (token) {
-      $scope.userToken = token;
-    };
+    $scope.isAuthenticated = AuthService.isAuthenticated();
+    $scope.setisAuthenticated = function(value){
+      $scope.isAuthenticated = value;
+    }
 })
-.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+.config(function($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
+
+  // Local storage config
+  localStorageServiceProvider
+  .setPrefix('miamm');
+
   $urlRouterProvider.otherwise('/login');
 
   $stateProvider
@@ -26,6 +32,11 @@ angular.module('miammWebClient', [
       url: '/login',
       templateUrl: 'components/auth/loginView.html',
       controller: 'LoginCtrl'
+    })
+    .state('logout', {
+      url: '/logout',
+      templateUrl: 'components/auth/loginView.html',
+      controller: 'LogoutCtrl'
     })
     .state('register', {
       url: '/register',
