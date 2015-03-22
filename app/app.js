@@ -23,10 +23,7 @@ angular.module('miammWebClient', [
   localStorageServiceProvider
   .setPrefix('miamm');
 
-  $urlRouterProvider.otherwise('/login');
-
   $stateProvider
-
     // HOME STATES AND NESTED VIEWS
     .state('login', {
       url: '/login',
@@ -46,7 +43,18 @@ angular.module('miammWebClient', [
     .state('home', {
       url: '/',
       templateUrl: 'components/menu/dashboardView.html',
-      controller: 'dashboardCtrl'
-    })
+      controller: 'dashboardCtrl',
+      authenticate: true
+    });
 
+    $urlRouterProvider.otherwise('/');
+})
+.run(function($rootScope, $state, AuthService) {
+  $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
+    if(toState.authenticate && !AuthService.isAuthenticated()){
+      // User isn’t authenticated
+      $state.transitionTo("login");
+      event.preventDefault();
+    }
+  });
 });

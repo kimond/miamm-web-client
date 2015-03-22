@@ -1,5 +1,5 @@
 angular.module('miammWebClient.auth', ['miammWebClient.config'])
-.controller('LoginCtrl', function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
+.controller('LoginCtrl', function ($scope, $rootScope, $state, AUTH_EVENTS, AuthService) {
   $scope.credentials = {
     username: '',
     password: ''
@@ -8,6 +8,7 @@ angular.module('miammWebClient.auth', ['miammWebClient.config'])
     AuthService.login(credentials).then(function (token) {
       $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
       $scope.setisAuthenticated(AuthService.isAuthenticated());
+      $state.go("home");
     }, function () {
       $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
     });
@@ -33,13 +34,14 @@ angular.module('miammWebClient.auth', ['miammWebClient.config'])
     });
   };
 })
-.factory('AuthService', function ($http, $rootScope, localStorageService, Session, SETTINGS) {
+.factory('AuthService', function ($http, $rootScope, $state, localStorageService, Session, SETTINGS) {
   var authService = {};
 
   authService.init = function() {
     var userToken = localStorageService.get("userToken")
     if(userToken){
       Session.create(userToken);
+      $state.go("home");
     }
   };
 
