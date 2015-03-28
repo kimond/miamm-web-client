@@ -1,5 +1,6 @@
 angular.module('miammWebClient.auth', ['miammWebClient.config'])
 .controller('LoginCtrl', function ($scope, $rootScope, $state, AUTH_EVENTS, AuthService) {
+  $rootScope.pageTitle = "Welcome on Miamm"
   $scope.credentials = {
     username: '',
     password: ''
@@ -20,6 +21,7 @@ angular.module('miammWebClient.auth', ['miammWebClient.config'])
   $state.go("login");
 })
 .controller('RegisterCtrl', function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
+  $rootScope.pageTitle = "Welcome on Miamm"
   $scope.credentials = {
     username: '',
     password1: '',
@@ -40,6 +42,7 @@ angular.module('miammWebClient.auth', ['miammWebClient.config'])
   authService.init = function() {
     var userToken = localStorageService.get("userToken")
     if(userToken){
+      $http.defaults.headers.common.Authorization = 'Token ' + userToken;
       Session.create(userToken);
       $state.go("home");
     }
@@ -51,6 +54,7 @@ angular.module('miammWebClient.auth', ['miammWebClient.config'])
     .then(function (res) {
         Session.create(res.data.key);
         localStorageService.set('userToken',res.data.key);
+        $http.defaults.headers.common.Authorization = 'Token ' + res.data.key;
         return res.data.key;
       });
     };
@@ -65,6 +69,7 @@ angular.module('miammWebClient.auth', ['miammWebClient.config'])
     };
 
     authService.logout = function(){
+      $http.defaults.headers.common.Authorization = {};
       localStorageService.clearAll();
       Session.destroy();
     }

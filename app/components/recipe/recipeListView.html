@@ -1,0 +1,24 @@
+<div class="container content">
+  <div class="row">
+  <a class="waves-effect waves-light btn-large orange darken-2" ui-sref="recipesAdd"><i class="mdi-content-add right"></i>Add a recipe</a>
+  </div>
+  <table class="responsive-table hoverable">
+    <thead>
+      <tr>
+        <th data-field="name">Name</th>
+        <th data-field="prepareTime">Prepare time</th>
+        <th data-field="cookTime">Cook time</th>
+        <th data-field="portion">Portion</th>
+        <th data-field="comment">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="recipe in recipeList">
+
+      </tr>
+    </tbody>
+   </table>
+   <div ng-hide="recipeList.length">
+     <h5 class="center-align">No recipes found</h5>
+   </div>
+</div>

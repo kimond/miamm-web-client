@@ -2,6 +2,7 @@
 angular.module("miammWebClient.config", []);
 angular.module("miammWebClient.auth", ["miammWebClient.config"]);
 angular.module("miammWebClient.menu", ["miammWebClient.config"]);
+angular.module("miammWebClient.recipe", ["miammWebClient.config"]);
 
 angular.module('miammWebClient', [
 'ui.router',
@@ -9,7 +10,8 @@ angular.module('miammWebClient', [
 'LocalStorageModule',
 'miammWebClient.config',
 'miammWebClient.auth',
-'miammWebClient.menu'
+'miammWebClient.menu',
+'miammWebClient.recipe'
 ])
 .controller('mainController', function ($scope, AuthService) {
     $scope.isAuthenticated = AuthService.isAuthenticated();
@@ -39,6 +41,16 @@ angular.module('miammWebClient', [
       url: '/register',
       templateUrl: 'components/auth/registerView.html',
       controller: 'RegisterCtrl'
+    })
+    .state('recipes', {
+      url: '/recipes',
+      templateUrl: 'components/recipe/recipeListView.html',
+      controller: 'recipeListCtrl'
+    })
+    .state('recipesAdd', {
+      url: '/recipes/add',
+      templateUrl: 'components/recipe/recipeAddView.html',
+      controller: 'recipeAddCtrl'
     })
     .state('home', {
       url: '/',

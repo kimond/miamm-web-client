@@ -17,26 +17,43 @@
   <script src="config.js"></script>
   <script src="components/auth/auth.js"></script>
   <script src="components/menu/menu.js"></script>
+  <script src="components/recipe/recipe.js"></script>
 </head>
 <body ng-controller="mainController">
-  <ul id="nav-profile-dd" class="dropdown-content">
-    <li><a href="#!">Edit</a></li>
-    <li class="divider"></li>
-    <li><a ui-sref="logout">Logout</a></li>
-  </ul>
-  <nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Miamm</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li ng-show="isAuthenticated"><a class="dropdown-button" href="#!" data-activates="nav-profile-dd">Profile<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
-      </ul>
-      <ul id="slide-out" class="side-nav">
-      </ul>
-      <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+<header ng-class="{noFixedSideNav: !isAuthenticated}">
+  <nav class="top-nav" ng-show="isAuthenticated">
+    <div class="container">
+      <div class="nav-wrapper">
+        <a class="page-title center">{{pageTitle}}</a>
+        </div>
     </div>
   </nav>
-
-  <div ui-view class="container"></div>
+  <div class="container" ng-hide="isAuthenticated">
+    <div class="center-align"><img src="assets/images/miamm_logo.svg" width="300px;" class="responsive-img"/></div>
+  </div>
+  <div class="container" ng-hide="!isAuthenticated"><a href="#" data-activates="nav-mobile" class="button-collapse top-nav"><i class="mdi-navigation-menu"></i></a></div>
+  <ul id="nav-mobile" class="side-nav" ng-class="{fixed: isAuthenticated}">
+    <li class="logo">
+      <a id="logo-container" href="#/" class="brand-logo">
+        <object id="front-page-logo" data="assets/images/miamm_logo.svg" type="image/svg+xml">Miamm</object>
+      </a></li>
+    <li class="bold"><a href="#!" class="waves-effect waves-green">Dashboard</a></li>
+    <li class="bold"><a href="#!" class="waves-effect waves-green">Menus</a></li>
+    <li class="bold"><a ui-sref="recipes" class="waves-effect waves-green">Recipes</a></li>
+    <li class="no-padding">
+      <ul class="collapsible collapsible-accordion">
+        <li class="bold"><a class="collapsible-header  waves-effect waves-green">Profile</a>
+          <div class="collapsible-body">
+            <ul>
+              <li><a href="#!">Edit</a></li>
+              <li><a ui-sref="logout">Logout</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+  </ul>
+</header>
+<main ng-class="{noFixedSideNav: !isAuthenticated}" ui-view></main>
 
 </body>
 <script>

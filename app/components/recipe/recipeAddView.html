@@ -1,0 +1,56 @@
+<div class="container content">
+  <form class="col s12" ng-submit="addRecipe(recipe)">
+    <div class="section">
+      <h5>Recipe informations</h5>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="name" type="text" ng-model="recipe.name" class="validate">
+          <label for="name">Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s4">
+          <input id="pt" type="number" ng-model="recipe.prepare_time" class="validate">
+          <label for="pt">Prepare time</label>
+        </div>
+        <div class="input-field col s4">
+          <input id="ct" type="number" ng-model="recipe.cook_time" class="validate">
+          <label for="ct">Cook time</label>
+        </div>
+        <div class="input-field col s4">
+          <input id="portion" type="number" ng-model="recipe.portion" class="validate">
+          <label for="portion">Portion</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea id="comment" ng-model="recipe.comment" class="materialize-textarea"></textarea>
+          <label for="comment">Description</label>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="row">
+      <h5 class="col s3">Recipe ingredients</h5>
+      <button class="col s2 waves-effect waves-light btn orange darken-2" ng-click="addIngredientField()"><i class="mdi-content-add right"></i>Add a ingredient</button>
+      </div>
+      <div class="row" ng-repeat="ingredient in ingredients track by $index">
+        <div class="input-field col s4">
+          <input id="ingredientName[$index]" type="text" ng-model="ingredients[$index].name" class="validate">
+          <label for="ingredientName[$index]">Name</label>
+        </div>
+        <div class="input-field col s3">
+          <input id="quantity[$index]" type="number" ng-model="ingredients[$index].quantity" class="validate">
+          <label for="quantity[$index]">Quantity</label>
+        </div>
+        <div class="input-field col s4">
+          <input id="quantity_type[$index]" type="text" ng-model="ingredients[$index].quantity_type" class="validate">
+          <label for="quantity_type[$index]">Quantity type</label>
+        </div>
+        <div class="col s1">
+          <a class="waves-effect waves-light btn-floating red darken-2" ng-click="removeIngredientField($index)"><i class="mdi-content-remove right"></i></a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
