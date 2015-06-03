@@ -52,5 +52,25 @@
         </div>
       </div>
     </div>
+    <div class="section">
+      <div class="row">
+      <h5 class="col s3">Recipe steps</h5>
+      <button class="col s2 waves-effect waves-light btn orange darken-2" ng-click="addStepField()"><i class="mdi-content-add right"></i>Add a steps</button>
+      </div>
+      <div class="row" ng-repeat="step in steps track by $index">
+        <div class="input-field col s11">
+          <textarea id="explanation[$index]" ng-model="steps[$index].explanation" class="materialize-textarea validate"></textarea>
+          <label for="explanation[$index]">Explanation</label>
+        </div>
+        <div class="col s1">
+          <a class="waves-effect waves-light btn-floating red darken-2" ng-click="removeStepField($index)"><i class="mdi-content-remove right"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <button class="btn-floating btn-large green" type="submit">
+      <i class="large mdi-content-send"></i>
+    </button>
+  </div>
   </form>
 </div>

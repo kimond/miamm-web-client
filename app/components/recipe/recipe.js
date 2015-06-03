@@ -6,11 +6,22 @@ angular.module('miammWebClient.recipe', ['miammWebClient.config'])
 .controller('recipeAddCtrl', function ($scope, $rootScope, recipeService) {
   $rootScope.pageTitle = "Add a recipe";
   $scope.ingredients = [];
+  $scope.steps = [];
   $scope.addIngredientField = function() {
     $scope.ingredients.push('');
   }
   $scope.removeIngredientField = function(index) {
     $scope.ingredients.splice(index,1);
+  }
+  $scope.addStepField = function() {
+    $scope.steps.push('');
+  }
+  $scope.removeStepField = function(index) {
+    $scope.steps.splice(index,1);
+  }
+  $scope.addRecipe = function(recipe){
+      console.log(recipe);
+      recipeService.add(recipe);
   }
 })
 .factory('recipeService', function ($http, $rootScope, $state, localStorageService, Session, SETTINGS) {
@@ -23,6 +34,11 @@ angular.module('miammWebClient.recipe', ['miammWebClient.config'])
     .then(function (res) {
       return res.data;
     });
+  };
+
+  recipeService.add = function(){
+      return $http
+      .post(SETTINGS.SERVICE_URL+'/recipes')
   };
 
   return recipeService;
