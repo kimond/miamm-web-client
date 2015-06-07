@@ -1,7 +1,7 @@
 angular.module('miammWebClient.recipe', ['miammWebClient.config'])
 .controller('recipeListCtrl', function ($scope, $rootScope, recipeService) {
   $rootScope.pageTitle = "Recipe list";
-  $scope.recipeList = recipeService.list()
+  $scope.recipeList = recipeService.list();
 })
 .controller('recipeAddCtrl', function ($scope, $rootScope, recipeService) {
   $rootScope.pageTitle = "Add a recipe";
@@ -20,7 +20,6 @@ angular.module('miammWebClient.recipe', ['miammWebClient.config'])
     $scope.steps.splice(index,1);
   }
   $scope.addRecipe = function(recipe){
-      console.log(recipe);
       recipeService.add(recipe);
   }
 })
@@ -36,9 +35,10 @@ angular.module('miammWebClient.recipe', ['miammWebClient.config'])
     });
   };
 
-  recipeService.add = function(){
+  recipeService.add = function(recipe){
+      serializedRecipe = angular.toJson(recipe);
       return $http
-      .post(SETTINGS.SERVICE_URL+'/recipes')
+      .post(SETTINGS.SERVICE_URL+'/recipes/', serializedRecipe)
   };
 
   return recipeService;
